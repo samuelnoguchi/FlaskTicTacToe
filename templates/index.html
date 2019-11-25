@@ -1,9 +1,26 @@
 {% extends 'base.html' %}
 
 {% block head %}
-
 {% endblock %}
 
 {% block body %}
-<h1>hi</h1>
+<div class="row h-100">
+    <div class="col-sm-12 my-auto">
+        <div class="jumbotron mx-5">
+            <h1 class="display-4 text-center">Tic Tac Toe</h1>
+            <p class="lead text-center">Play against a friend or challenge the computer in a game of tic tac toe (bewarned, you wont beat the computer)</p>
+            <hr class="my-4">
+            <div class="container">
+            <div class="row">
+                <div class="col-sm text-center">
+                        <button type="button mx-auto" class="btn btn-primary">2 Players</button>          
+                </div>
+                <div class="col-sm text-center">
+                        <button type="button" class="btn btn-primary">1 Player</button>
+                </div>
+            </div>
+            </div>
+          </div>
+    </div>
+ </div>
 {% endblock %}
