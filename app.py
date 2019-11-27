@@ -9,6 +9,7 @@ import math
 
 app = Flask(__name__)
 
+
 # Return the String representation of that location
 def game_to_json(g: game.Game):
     game_dict = dict()
@@ -27,7 +28,6 @@ def game_to_json(g: game.Game):
             board_state += str(g.game_board.value_at(row_num, col_num)) + " "
 
     game_dict['board_state'] = board_state
-
     return json.dumps(game_dict)
 
 
@@ -41,10 +41,14 @@ def json_to_game(j, g: game.Game):
             moves.append(board.TTTValue.EMPTY)
         if cell == 'X':
             moves.append(board.TTTValue.X)
-        if cell == 'Y':
+        if cell == 'O':
             moves.append(board.TTTValue.O)
 
     g.set_board(moves)
+
+    # Set the correct player to whoever just moved
+    if j['player_x_turn'] == 'False':
+        g.player_x_turn = False
 
 
 # Choose number of players
@@ -74,22 +78,43 @@ def play_game(num_players):
         # Set up the game based on previous game state
         json_to_game(game_state_json, tic_tac_toe_game)
 
-
+      
+    # Get the new move
     if "choice" in request.form:
+        print("Play, player_x_turn = " + str(tic_tac_toe_game.player_x_turn), file=sys.stderr)
+
         x = int(request.form["choice"]) % 3    
         y = math.floor(int(request.form["choice"]) / 3)
         tic_tac_toe_game.make_move([x, y])
 
+        print(game_to_json(tic_tac_toe_game), file=sys.stderr)
+        # Check for win
+        if tic_tac_toe_game.game_board.is_won():
+            print("Game won", file=sys.stderr)
+            if tic_tac_toe_game.player_x_turn:
+                pass
+            else:
+                pass
+        
+        else:
+            # parity the turn
+            tic_tac_toe_game.player_x_turn = not tic_tac_toe_game.player_x_turn
+            print("Changing turns, player_x_turn = " + str(tic_tac_toe_game.player_x_turn), file=sys.stderr)
+        
     resp = make_response(render_template('game.html', game=tic_tac_toe_game))
-
     # Store the game state
     resp.set_cookie("game_state", game_to_json(tic_tac_toe_game))
+    print(game_to_json(tic_tac_toe_game), file=sys.stderr)
+
     return resp
 
 # Restart game
 @app.route('/start-over')
 def start_over():
-    return render_template('index.html')
+    resp = make_response(render_template('index.html'))
+    # Reset the game state
+    resp.set_cookie('game_state', '', expires=0)
+    return resp
 
 
 if __name__ == "__main__":
