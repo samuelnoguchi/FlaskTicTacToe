@@ -5,22 +5,27 @@
 
 {% block body %}
 
-<form action="" method="POST">
-        <table>
-          {% for j in range(0, 3) %}
-          <tr>
-            {% for i in range(0, 3) %}
-            <td>
-              <button type="submit" name="choice" value="{{j*3+i+1}}" class="btn btn-primary">
-                S
-              </button>
-            </td>
-            {% endfor %}
-          </tr>
-          {% endfor %}
-        </table>
-        <!--<button type="submit" name="reset">Start Over</button>-->
-      </form>
+<div class="row h-100">
+    <div class="col-sm-12 my-auto text-center" >
+        <form action="" method="POST">
+            <table class="mx-auto board">
+                {% for j in range(0, 3) %}
+                <tr>
+                {% for i in range(0, 3) %}
+                <td>
+                    <button type="submit" name="choice" value="{{j*3+i}}" class="btn btn-primary p-5">
+                        {{ game.game_board.value_at(j, i) }}
+                    </button>
+                </td>
+                {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+        </form>
+        <a href="/start-over" class="btn btn-primary my-3">Start Over</a>
+    </div>
+</div>
+
 
 
 {% endblock %}

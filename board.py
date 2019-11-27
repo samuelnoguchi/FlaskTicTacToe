@@ -85,3 +85,11 @@ class GameBoard:
                     diagonal_homogeneous = False
 
         return diagonal_homogeneous
+
+    def value_at(self, row, col):
+        if self.board[row][col] == TTTValue.EMPTY:
+            return '_'
+        elif self.board[row][col] == TTTValue.X:
+            return 'X'    
+        else:
+            return 'O'

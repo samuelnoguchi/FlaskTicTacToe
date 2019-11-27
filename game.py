@@ -26,7 +26,16 @@ class Game(subject.Subject):
     def set_board(self, moves: list):
         for row_num in range(0, self.game_board.board_size):
             for col_num in range(0, self.game_board.board_size):
-                self.game_board.board[row_num][col_num] = list[self.game_board.board_size * row_num + col_num]
+                self.game_board.board[row_num][col_num] = moves[self.game_board.board_size * row_num + col_num]
+
+    # Code to make a single move, given the move_location
+    def make_move(self, move_location):
+        if self.player_x_turn:
+            val = board.TTTValue.X
+        else:
+            val = board.TTTValue.O
+
+        self.game_board.make_move(move_location, val)
 
     # Code to play the game
     def play(self):
