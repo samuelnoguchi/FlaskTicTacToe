@@ -5,42 +5,22 @@
 
 {% block body %}
 
-
-  <div class="row h-100">
-    <div class="col-sm-12 my-auto">
-        <div class="row">
-            <div class="col">
-                    <a href="/game/1-player/player_x" class="btn btn-primary">1 Players</a>        
-            </div>
-            <div class="col">
-                col
-            </div>
-            <div class="col">
-                col
-            </div>
-            <div class="w-100"></div>
-            <div class="col">
-                col
-            </div>
-            <div class="col">
-                col
-            </div>
-            <div class="col">
-                col
-            </div>
-            <div class="w-100"></div>
-            <div class="col">
-                col
-            </div>
-            <div class="col">
-                col
-            </div>
-            <div class="col">
-                col
-            </div>
-        </div>
-    </div>
- </div>
+<form action="" method="POST">
+        <table>
+          {% for j in range(0, 3) %}
+          <tr>
+            {% for i in range(0, 3) %}
+            <td>
+              <button type="submit" name="choice" value="{{j*3+i+1}}" class="btn btn-primary">
+                S
+              </button>
+            </td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </table>
+        <!--<button type="submit" name="reset">Start Over</button>-->
+      </form>
 
 
 {% endblock %}

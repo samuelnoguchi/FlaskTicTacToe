@@ -30,8 +30,10 @@ def play_game(num_players):
     if game_state_cookie:
         pass
 
-    return num_players
-
+    resp = make_response(render_template('game.html', game=tic_tac_toe_game))
+    #c = ",".join(map(str, ttt.board))
+    #resp.set_cookie("game_board", c)
+    return resp
 
 if __name__ == "__main__":
     app.run(debug=True)
