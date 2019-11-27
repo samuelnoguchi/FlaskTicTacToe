@@ -23,6 +23,11 @@ class Game(subject.Subject):
         self.player_x = player_x
         self.player_y = player_y
 
+    def set_board(self, moves: list):
+        for row_num in range(0, self.game_board.board_size):
+            for col_num in range(0, self.game_board.board_size):
+                self.game_board.board[row_num][col_num] = list[self.game_board.board_size * row_num + col_num]
+
     # Code to play the game
     def play(self):
         # Play until the game is over
