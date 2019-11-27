@@ -64,9 +64,9 @@ def play_game(num_players):
     player_1 = player.RealPlayer()
 
     if(num_players == '1-player'):
-        player_2 = player.RealPlayer()
-    else:
         player_2 = player.CPUPlayer()
+    else:
+        player_2 = player.RealPlayer()
 
     # Create the game
     tic_tac_toe_game = game.Game(True, player_1, player_2)
@@ -90,17 +90,31 @@ def play_game(num_players):
         print(game_to_json(tic_tac_toe_game), file=sys.stderr)
         # Check for win
         if tic_tac_toe_game.game_board.is_won():
-            print("Game won", file=sys.stderr)
+            tic_tac_toe_game.game_over = True
+
             if tic_tac_toe_game.player_x_turn:
-                pass
+                tic_tac_toe_game.player_x_wins = True
             else:
-                pass
+                tic_tac_toe_game.player_y_wins = True
         
         else:
             # parity the turn
             tic_tac_toe_game.player_x_turn = not tic_tac_toe_game.player_x_turn
-            print("Changing turns, player_x_turn = " + str(tic_tac_toe_game.player_x_turn), file=sys.stderr)
-        
+
+            # Make computer move in 1 player mode
+            if(num_players == '1-player'):
+                move_location = tic_tac_toe_game.player_y.get_move()
+                tic_tac_toe_game.make_move(move_location)
+
+                # parity the turn
+                tic_tac_toe_game.player_x_turn = not tic_tac_toe_game.player_x_turn
+                
+                # check for CPU win
+                if tic_tac_toe_game.game_board.is_won():
+                    tic_tac_toe_game.game_over = True
+                    tic_tac_toe_game.player_y_wins = True
+
+
     resp = make_response(render_template('game.html', game=tic_tac_toe_game))
     # Store the game state
     resp.set_cookie("game_state", game_to_json(tic_tac_toe_game))
