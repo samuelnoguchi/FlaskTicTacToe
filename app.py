@@ -66,7 +66,7 @@ def get_message(g: game.Game, num_players):
             message = "It's a Tie!"
     else:
         if g.player_x_turn and num_players == '1-player':
-            message = "Your Turn (X)"
+            message = "Your Turn (X) (Please be patient while the computer thinks...)"
         elif g.player_x_turn and num_players == '2-player':
             message = "Player 1's Turn (X)"
         elif not g.player_x_turn and num_players == '2-player':
