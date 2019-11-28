@@ -1,11 +1,11 @@
 from __future__ import print_function
 from flask import Flask, render_template, request, make_response
-import game
-import board
-import sys
-import player
 import json
 import math
+import game
+import board
+import player
+
 
 app = Flask(__name__)
 
@@ -51,6 +51,28 @@ def json_to_game(j, g: game.Game):
         g.player_x_turn = False
 
 
+# Determine the message to display on screen
+def get_message(g: game.Game, num_players):
+    if g.game_over:
+        if g.player_x_wins and num_players == '2-player':
+            message = "Player 1 wins!"
+        elif g.player_y_wins and num_players == '2-player':
+            message = "Player 2 wins!"
+        elif g.player_x_wins and num_players == '1-player':
+            message = "You won??"
+        elif g.player_y_wins and num_players == '1-player':
+            message = "You lost to the computer..."
+        else:
+            message = "It's a Tie!"
+    else:
+        if g.player_x_turn and num_players == '1-player':
+            message = "Your Turn (X)"
+        elif g.player_x_turn and num_players == '2-player':
+            message = "Player 1's Turn (X)"
+        elif not g.player_x_turn and num_players == '2-player':
+            message = "Player 2's Turn (O)"
+    return message
+
 # Choose number of players
 @app.route('/')
 def index():
@@ -77,7 +99,6 @@ def play_game(num_players):
         game_state_json = json.loads(game_state_cookie)
         # Set up the game based on previous game state
         json_to_game(game_state_json, tic_tac_toe_game)
-
       
     # Get the new move
     if "choice" in request.form:
@@ -117,27 +138,7 @@ def play_game(num_players):
                 elif len(tic_tac_toe_game.game_board.available_moves()) == 0:
                     tic_tac_toe_game.game_over = True
 
-    # Determine the message to display on screen
-    if tic_tac_toe_game.game_over:
-        if tic_tac_toe_game.player_x_wins and num_players == '2-player':
-            message = "Player 1 wins!"
-        elif tic_tac_toe_game.player_y_wins and num_players == '2-player':
-            message = "Player 2 wins!"
-        elif tic_tac_toe_game.player_x_wins and num_players == '1-player':
-            message = "You won??"
-        elif tic_tac_toe_game.player_y_wins and num_players == '1-player':
-            message = "You lost to the computer..."
-        else:
-            message = "It's a Tie!"
-    else:
-        if tic_tac_toe_game.player_x_turn and num_players == '1-player':
-            message = "Your Turn (X)"
-        elif tic_tac_toe_game.player_x_turn and num_players == '2-player':
-            message = "Player 1's Turn (X)"
-        elif not tic_tac_toe_game.player_x_turn and num_players == '2-player':
-            message = "Player 2's Turn (O)"
-
-    resp = make_response(render_template('game.html', game=tic_tac_toe_game, message=message))
+    resp = make_response(render_template('game.html', game=tic_tac_toe_game, game_over=tic_tac_toe_game.game_over, message=get_message(tic_tac_toe_game, num_players)))
     # Store the game state
     resp.set_cookie("game_state", game_to_json(tic_tac_toe_game))
     return resp
