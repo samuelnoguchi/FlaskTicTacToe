@@ -84,8 +84,21 @@ class GameBoard:
                                                           != self.board[i-1][i-1]):
                     diagonal_homogeneous = False
 
-        return diagonal_homogeneous
+        # If the first diagonal is homogeneous return true
+        if diagonal_homogeneous:
+            return True
 
+        # Check other diagonal
+        for i in range(self.board_size):
+            if self.board[i][self.board_size-1-i] == TTTValue.EMPTY:
+                return False
+            if i != 0:
+                if self.board[i][self.board_size-1-i] != self.board[i-1][self.board_size-i]:
+                    return False
+
+        return True
+
+    # Get the string representation of the value at position (row, col)
     def value_at(self, row, col):
         if self.board[row][col] == TTTValue.EMPTY:
             return '_'
